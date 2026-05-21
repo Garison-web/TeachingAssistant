@@ -33,6 +33,20 @@ yarn-error.*
 # local env files
 .env*.local
 
+# Backend secrets & generated files — never commit
+backend/.env
+backend/chroma_store/
+backend/uploads/
+backend/teaching_assistant.db
+backend/venv/
+backend/__pycache__/
+backend/**/__pycache__/
+backend/*.pyc
+
+# Dev server logs
+expo.log
+backend.log
+
 # typescript
 *.tsbuildinfo
 
