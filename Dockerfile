@@ -12,7 +12,12 @@ WORKDIR /app/backend
 # Upgrade pip and install setuptools into the global environment
 RUN pip install --upgrade pip setuptools wheel
 
-# Install CPU-only torch first — keeps the image ~800 MB smaller than the CUDA build
+# Pin numpy 2.x before torch and onnxruntime so all three link against the same ABI.
+# onnxruntime (pulled by chromadb) is compiled against numpy 2.x; installing numpy 1.x
+# first causes an ABI mismatch that crashes onnxruntime at import time.
+RUN pip install --no-cache-dir "numpy>=2.0,<3.0"
+
+# Install CPU-only torch (numpy 2.x compatible since torch 2.1+)
 RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu
 
 # openai-whisper uses a legacy setup.py that needs pkg_resources (setuptools).
@@ -23,7 +28,7 @@ RUN pip install --no-cache-dir --no-build-isolation openai-whisper==20231117
 # We exclude openai-whisper from this install so pip's backtracking resolver
 # never tries to rebuild it (which would fail without --no-build-isolation).
 # Increment CACHEBUST to force Docker to re-run this layer on the next build.
-ARG CACHEBUST=2
+ARG CACHEBUST=3
 COPY backend/requirements.txt .
 RUN grep -v 'openai-whisper' requirements.txt > /tmp/requirements_rest.txt && \
     pip install --no-cache-dir -r /tmp/requirements_rest.txt

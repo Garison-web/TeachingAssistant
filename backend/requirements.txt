@@ -22,7 +22,7 @@ sentence-transformers==3.0.0     # local embeddings (all-MiniLM-L6-v2)
 # Install CPU-only build to avoid a 2 GB CUDA download on machines without GPU:
 #   pip install torch --index-url https://download.pytorch.org/whl/cpu
 # (sentence-transformers will still work correctly on CPU)
-numpy>=1.24                      # upper bound removed — onnxruntime 1.26+ requires numpy 2.x
+numpy>=2.0,<3.0                  # must match what onnxruntime (chromadb dep) was compiled against
 
 # ── Relational / session storage ──────────────────────────────
 aiosqlite==0.20.0                # async SQLite driver
