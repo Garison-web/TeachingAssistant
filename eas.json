@@ -7,6 +7,9 @@
     "preview": {
       "android": {
         "buildType": "apk"
+      },
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://YOUR-RAILWAY-URL.up.railway.app/api"
       }
     },
     "production": {

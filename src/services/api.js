@@ -13,13 +13,22 @@
 
 import { Platform } from 'react-native';
 
-const LAN_IP = '192.168.31.86';
-export const BASE_URL = Platform.OS === 'web'
-  ? 'http://localhost:8000/api'
-  : `http://${LAN_IP}:8000/api`;
-const HEALTH_URL = Platform.OS === 'web'
-  ? 'http://localhost:8000/health'
-  : `http://${LAN_IP}:8000/health`;
+// Set EXPO_PUBLIC_API_URL in eas.json (or EAS dashboard) for production builds.
+// Leave it unset during local development — it falls back to the LAN IP below.
+const PROD_URL = process.env.EXPO_PUBLIC_API_URL;
+const LAN_IP   = '192.168.31.86';
+
+export const BASE_URL = PROD_URL
+  ? PROD_URL
+  : Platform.OS === 'web'
+    ? 'http://localhost:8000/api'
+    : `http://${LAN_IP}:8000/api`;
+
+const HEALTH_URL = PROD_URL
+  ? PROD_URL.replace(/\/api$/, '/health')
+  : Platform.OS === 'web'
+    ? 'http://localhost:8000/health'
+    : `http://${LAN_IP}:8000/health`;
 
 // ─── Core fetch wrapper ──────────────────────────────────────────────────────
 

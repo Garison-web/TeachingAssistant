@@ -19,19 +19,21 @@ if hasattr(sys.stdout, "reconfigure"):
 if hasattr(sys.stderr, "reconfigure"):
     sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
-# Ensure ffmpeg (installed via winget) is on PATH for whisper_service
-_ffmpeg_patterns = [
-    r"C:\Users\*\AppData\Local\Microsoft\WinGet\Packages\Gyan.FFmpeg*\ffmpeg-*\bin",
-    r"C:\ProgramData\chocolatey\bin",
-    r"C:\ffmpeg\bin",
-]
-for _pat in _ffmpeg_patterns:
-    _matches = _glob.glob(_pat)
-    if _matches:
-        _ffmpeg_bin = _matches[0]
-        if _ffmpeg_bin not in os.environ.get("PATH", ""):
-            os.environ["PATH"] = _ffmpeg_bin + os.pathsep + os.environ["PATH"]
-        break
+# On Windows, ffmpeg may be installed via winget/choco and not on PATH automatically.
+# On Linux/Docker, ffmpeg is installed system-wide via apt and already on PATH.
+if sys.platform == "win32":
+    _ffmpeg_patterns = [
+        r"C:\Users\*\AppData\Local\Microsoft\WinGet\Packages\Gyan.FFmpeg*\ffmpeg-*\bin",
+        r"C:\ProgramData\chocolatey\bin",
+        r"C:\ffmpeg\bin",
+    ]
+    for _pat in _ffmpeg_patterns:
+        _matches = _glob.glob(_pat)
+        if _matches:
+            _ffmpeg_bin = _matches[0]
+            if _ffmpeg_bin not in os.environ.get("PATH", ""):
+                os.environ["PATH"] = _ffmpeg_bin + os.pathsep + os.environ["PATH"]
+            break
 
 from dotenv import load_dotenv
 from fastapi import FastAPI
