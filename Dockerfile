@@ -9,6 +9,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /app/backend
 
+# openai-whisper uses a legacy setup.py build that needs pkg_resources (setuptools)
+RUN pip install --upgrade pip setuptools wheel
+
 # Install CPU-only torch first — keeps the image ~800 MB smaller than the CUDA build
 RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu
 
