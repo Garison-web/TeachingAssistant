@@ -3,8 +3,8 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/Garison-web/TeachingAssistant/releases/latest">
-    <img src="https://img.shields.io/badge/Download%20APK-%E2%AC%87%20Get%20It%20Now-a78bfa?style=for-the-badge&logo=android&logoColor=white" />
+  <a href="https://github.com/Garison-web/TeachingAssistant/releases">
+    <img src="https://img.shields.io/badge/APK-Coming%20Soon-6b7280?style=for-the-badge&logo=android&logoColor=white" />
   </a>
   &nbsp;
   <img src="https://img.shields.io/badge/Platform-Android%20%7C%20iOS-34d399?style=for-the-badge&logo=expo&logoColor=white" />
@@ -42,19 +42,22 @@
 
 ## Download
 
-<p align="left">
-  <a href="https://github.com/Garison-web/TeachingAssistant/releases/latest">
-    <img src="https://img.shields.io/badge/Android%20APK-Download%20Latest%20Release-3ddc84?style=for-the-badge&logo=android&logoColor=white" />
-  </a>
-</p>
+> **A pre-built APK will be published here once the first release is tagged.**
+> Watch this repo or check the [Releases](https://github.com/Garison-web/TeachingAssistant/releases) page for updates.
 
-> Head to **[Releases](https://github.com/Garison-web/TeachingAssistant/releases)** and download the latest `.apk` file.
-> On your Android device: **Settings → Security → Allow unknown sources**, then open the APK to install.
+Until then, build and install your own APK in two steps:
 
-To build your own APK with EAS:
+**1. Build with EAS (cloud)**
 ```bash
-npx eas build --platform android --profile preview
+npm install -g eas-cli
+eas login
+eas build --platform android --profile preview
 ```
+Download the `.apk` from your [Expo dashboard](https://expo.dev) when the build finishes.
+
+**2. Install on Android**
+Transfer the `.apk` to your device, then:
+> **Settings → Security → Install unknown apps** → allow your file manager → open the APK.
 
 ---
 
