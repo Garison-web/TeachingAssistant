@@ -15,17 +15,16 @@ RUN pip install --upgrade pip setuptools wheel
 # Install CPU-only torch first — keeps the image ~800 MB smaller than the CUDA build
 RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu
 
-# openai-whisper uses a legacy setup.py that calls pkg_resources.
-# --no-build-isolation makes pip use the global setuptools instead of
-# creating a fresh isolated env that lacks it.
+# openai-whisper uses a legacy setup.py that needs pkg_resources (setuptools).
+# Install it first with --no-build-isolation so it uses the global setuptools.
 RUN pip install --no-cache-dir --no-build-isolation openai-whisper==20231117
 
-# Install remaining dependencies.
-# --no-build-isolation is required here too: pip's backtracking resolver can
-# re-collect openai-whisper when resolving langchain-openai constraints, and
-# without this flag it spins up a fresh isolated env that lacks pkg_resources.
+# Install the rest of the dependencies.
+# We exclude openai-whisper from this install so pip's backtracking resolver
+# never tries to rebuild it (which would fail without --no-build-isolation).
 COPY backend/requirements.txt .
-RUN pip install --no-cache-dir --no-build-isolation -r requirements.txt
+RUN grep -v 'openai-whisper' requirements.txt > /tmp/requirements_rest.txt && \
+    pip install --no-cache-dir -r /tmp/requirements_rest.txt
 
 # Pre-download the Whisper base model (~140 MB) at build time so the
 # first upload request doesn't stall waiting for the download.
