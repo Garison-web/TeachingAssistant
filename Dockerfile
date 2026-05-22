@@ -9,13 +9,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /app/backend
 
-# openai-whisper uses a legacy setup.py build that needs pkg_resources (setuptools)
+# Upgrade pip and install setuptools into the global environment
 RUN pip install --upgrade pip setuptools wheel
 
 # Install CPU-only torch first — keeps the image ~800 MB smaller than the CUDA build
 RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu
 
-# Install the rest of the Python dependencies
+# openai-whisper uses a legacy setup.py that calls pkg_resources.
+# --no-build-isolation makes pip use the global setuptools instead of
+# creating a fresh isolated env that lacks it.
+RUN pip install --no-cache-dir --no-build-isolation openai-whisper==20231117
+
+# Install remaining dependencies (openai-whisper will be skipped, already installed)
 COPY backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
