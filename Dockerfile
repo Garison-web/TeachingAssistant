@@ -20,9 +20,12 @@ RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/wh
 # creating a fresh isolated env that lacks it.
 RUN pip install --no-cache-dir --no-build-isolation openai-whisper==20231117
 
-# Install remaining dependencies (openai-whisper will be skipped, already installed)
+# Install remaining dependencies.
+# --no-build-isolation is required here too: pip's backtracking resolver can
+# re-collect openai-whisper when resolving langchain-openai constraints, and
+# without this flag it spins up a fresh isolated env that lacks pkg_resources.
 COPY backend/requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --no-build-isolation -r requirements.txt
 
 # Pre-download the Whisper base model (~140 MB) at build time so the
 # first upload request doesn't stall waiting for the download.
