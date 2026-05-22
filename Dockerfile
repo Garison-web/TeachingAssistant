@@ -28,7 +28,7 @@ RUN pip install --no-cache-dir --no-build-isolation openai-whisper==20231117
 # We exclude openai-whisper from this install so pip's backtracking resolver
 # never tries to rebuild it (which would fail without --no-build-isolation).
 # Increment CACHEBUST to force Docker to re-run this layer on the next build.
-ARG CACHEBUST=3
+ARG CACHEBUST=4
 COPY backend/requirements.txt .
 RUN grep -v 'openai-whisper' requirements.txt > /tmp/requirements_rest.txt && \
     pip install --no-cache-dir -r /tmp/requirements_rest.txt

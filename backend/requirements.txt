@@ -6,12 +6,8 @@ python-multipart==0.0.9          # file upload support
 # ── Transcription ─────────────────────────────────────────────
 openai-whisper==20231117         # local Whisper model
 
-# ── RAG pipeline ──────────────────────────────────────────────
-langchain==0.2.0
-langchain-community==0.2.0
-langchain-openai==0.1.8
-langchain-core>=0.2.0,<0.3.0    # explicit pin — all three packages above require this range
-openai==1.30.1                   # LLM backend (GPT-4o / GPT-3.5)
+# ── LLM backend ───────────────────────────────────────────────
+openai==1.30.1                   # Groq API (OpenAI-compatible SDK)
 
 # ── Vector database ───────────────────────────────────────────
 chromadb==0.6.3                  # 0.6.x removed the import-time onnxruntime crash
