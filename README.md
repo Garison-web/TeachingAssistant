@@ -24,6 +24,12 @@
 
 ---
 
+## Demo
+
+https://github.com/Garison-web/TeachingAssistant/blob/master/assets/screenshots/demo.mp4
+
+---
+
 ## Features
 
 | Feature | Description |
